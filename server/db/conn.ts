@@ -3,10 +3,7 @@ import mongoose from 'mongoose'
 const connectionString = process.env.ATLAS_URI || ''
 
 mongoose
-  .connect(connectionString, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(connectionString)
   .then(() => {
     console.log('Connected to MongoDB')
   })
