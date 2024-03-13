@@ -4,7 +4,7 @@ import 'dotenv/config'
 import './db/conn.js'
 import { userRouter } from './routes/users/index.js'
 
-const PORT = process.env.PORT || 5050
+const PORT = process.env.PORT || 5000
 
 const app = express()
 
@@ -19,10 +19,7 @@ app.get('/', (req, res) => {
 })
 
 // start the Express server
-if (process.env.NODE_ENV === 'dev') {
-  app.listen(PORT, () => {
-    console.log(`Server is running on port: ${PORT}`)
-  })
-}
 
-export const viteNodeApp = app
+app.listen(PORT, () => {
+  console.log(`Server is running on port: ${PORT}`)
+})

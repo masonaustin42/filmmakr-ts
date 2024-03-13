@@ -11,6 +11,8 @@ services:
     depends_on:
       - db
   nodebackend:
+    stdin_open: true
+    tty: true
     build:
       context: ./server
       dockerfile: Dockerfile
