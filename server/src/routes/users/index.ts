@@ -12,7 +12,17 @@ userRouter.get('/', (req: Request, res: Response) => {
 userRouter.post(
   '/',
   expressAsyncHandler(async (req: Request, res: Response) => {
-    const { firstName, lastName, email, password } = req.body
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+    }: {
+      firstName: string
+      lastName: string
+      email: string
+      password: string
+    } = req.body
 
     const user = new User({
       firstName,
