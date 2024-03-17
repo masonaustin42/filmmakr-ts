@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import crypto from 'crypto'
+import bcrypt from 'bcrypt'
 
 const gallerySchema = new mongoose.Schema({
   title: {
@@ -26,18 +26,20 @@ const gallerySchema = new mongoose.Schema({
   },
 })
 
-gallerySchema.pre('save', function (next) {
+gallerySchema.pre('save', async function (next) {
   if (this.isModified('passwordHash')) {
     if (this.passwordHash === null || this.passwordHash === undefined) {
       this.passwordHash = undefined
     } else {
-      this.passwordHash = crypto
-        .createHash('sha512')
-        .update(this.passwordHash)
-        .digest('hex')
+      this.passwordHash = await bcrypt.hash(this.passwordHash, 10)
     }
   }
   next()
 })
+
+gallerySchema.methods.comparePassword = async function (password: string) {
+  const hash = await bcrypt.compare(password, this.passwordHash)
+  return this.passwordHash === hash
+}
 
 export const Gallery = mongoose.model('Gallery', gallerySchema)

@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import crypto from 'crypto'
+import bcrypt from 'bcrypt'
 
 const userSchema = new mongoose.Schema({
   firstName: {
@@ -27,18 +27,15 @@ const userSchema = new mongoose.Schema({
   },
 })
 
-userSchema.pre('save', function (next) {
+userSchema.pre('save', async function (next) {
   if (this.isModified('passwordHash')) {
-    this.passwordHash = crypto
-      .createHash('sha512')
-      .update(this.passwordHash)
-      .digest('hex')
+    this.passwordHash = await bcrypt.hash(this.passwordHash, 10)
   }
   next()
 })
 
-userSchema.methods.comparePassword = function (password: string) {
-  const hash = crypto.createHash('sha256').update(password).digest('hex')
+userSchema.methods.comparePassword = async function (password: string) {
+  const hash = await bcrypt.compare(password, this.passwordHash)
   return this.passwordHash === hash
 }
 
