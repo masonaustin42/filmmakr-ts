@@ -1,9 +1,46 @@
 import { ErrorRequestHandler } from 'express'
+import { MongoServerError } from 'mongodb'
 import mongoose from 'mongoose'
 
-interface ErrorJSON extends Error {
+export interface ErrorJSON extends Error {
   errors: { [key: string]: string }
   status: number
+}
+
+const friendlyErrors = (err: Error) => {
+  if (err instanceof mongoose.Error.CastError) {
+    return {
+      name: 'Bad Request',
+      message: 'Invalid ID',
+      status: 400,
+    } as ErrorJSON
+  }
+  if (err instanceof mongoose.Error.ValidationError) {
+    const errors: { [key: string]: string } = {}
+    Object.keys(err.errors).forEach((key) => {
+      errors[key] = err.errors[key].message
+    })
+    return {
+      name: 'Validation Error',
+      errors,
+      status: 400,
+    } as ErrorJSON
+  }
+  if (err instanceof MongoServerError) {
+    if (err.code === 11000) {
+      return {
+        name: 'Unique Constraint Error',
+
+        message: `${Object.keys(err.keyValue)[0]} is already in use`,
+        status: 400,
+      } as ErrorJSON
+    }
+  }
+  return {
+    name: 'Server Error',
+    message: 'Internal Server Error',
+    status: 500,
+  } as ErrorJSON
 }
 
 export const formatErrors: ErrorRequestHandler = (err, _req, res, _next) => {
