@@ -2,7 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import 'dotenv/config'
 import './db/conn.js'
-import { userRouter } from './routes/users/index.js'
+import apiRouter from './routes/apiRouter.js'
 import { formatErrors } from './utils/formatErrors.js'
 
 const PORT = process.env.PORT || 5000
@@ -13,15 +13,10 @@ app.use(cors())
 app.use(express.json())
 
 // use routes
-app.use('/users', userRouter)
+app.use('/api', apiRouter)
 
 // Error handler
-
 app.use(formatErrors)
-
-app.get('/', (_req, res) => {
-  res.send('test from server')
-})
 
 // start the Express server
 

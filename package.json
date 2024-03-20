@@ -11,7 +11,7 @@
     "prettier": "^3.0.0"
   },
   "scripts": {
-    "dev": "concurrently \"cd server && nodemon server.mjs\" \"cd client && yarn run dev\"",
+    "dev": "concurrently \"cd server && yarn dev\" \"cd client && yarn dev\"",
     "dev-client": "concurrently \"cd client && yarn run dev\""
   }
 }
