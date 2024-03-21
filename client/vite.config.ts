@@ -8,5 +8,8 @@ export default defineConfig({
     proxy: {
       '/api': 'http://localhost:5000',
     },
+    cors: {
+      origin: ['http://localhost:5000', 'https://accounts.google.com'],
+    },
   },
 })
