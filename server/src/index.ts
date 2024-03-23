@@ -14,7 +14,7 @@ const app = express()
 app.use(
   cors({
     origin: [
-      'http://localhost:3000',
+      'http://localhost:5000',
       'http://localhost:5173',
       'https://accounts.google.com',
     ],

@@ -13,12 +13,15 @@ authRouter.get(
   '/login/google/callback',
   passport.authenticate('google', {
     failureRedirect: '/login',
-    successRedirect: '/',
+    successRedirect: 'http://localhost:5173/',
   }),
 )
 
-authRouter.post('/logout', (req, res) => {
-  // logout logic
+authRouter.post('/logout', (req, res, next) => {
+  req.logout(function (err) {
+    if (err) return next(err)
+    res.json({ message: 'Logged out' })
+  })
 })
 
 authRouter.post('/register', (req, res) => {

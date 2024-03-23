@@ -20,4 +20,4 @@ passport.use(
 )
 
 passport.serializeUser((user: any, done: Function) => done(null, user.id))
-passport.deserializeUser(async (id: string, done: Function) => done())
+passport.deserializeUser(async (user: any, done: Function) => done(null, user))
